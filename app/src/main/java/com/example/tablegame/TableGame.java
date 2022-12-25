@@ -68,8 +68,6 @@ public class TableGame extends AppCompatActivity {
     static boolean ttsIsUtteringTableRow = false;
     Handler myUiThreadHandler;
     Handler myWorkingThreadHandler;
-    Looper myWorkingThreadLooper;
-
 
     static List<Integer> choiceList = new ArrayList<>();
 
@@ -136,7 +134,7 @@ public class TableGame extends AppCompatActivity {
 
         Looper myLooper = Looper.getMainLooper();
 
-        myUiThreadHandler = new Handler(myLooper);
+
 
 
         Log.i("TableGame", "onCreate() " + Thread.currentThread().getName() + " ID: " + Thread.currentThread().getId());
@@ -154,7 +152,7 @@ public class TableGame extends AppCompatActivity {
         choiceLayout = findViewById(R.id.choiceLayout);
 
         ivGameStatus = findViewById(R.id.ivGameStatus);
-        ivGameStatus.setVisibility(View.GONE);
+        ivGameStatus.setVisibility(View.INVISIBLE);
         tableMultiplier = 1;
 
         initializeGamePlayLayout();
@@ -265,13 +263,7 @@ public class TableGame extends AppCompatActivity {
             else if ((tableMultiplier < 10) && (correctAnswerClicked)) {
                 if (gameMode == GAME_MODE_LEARN){
                     setAndUtterTableRowView();
-                    //setChoiceBoxView();
 
-
-                    /*tableMultiplier++;
-                    tvTableRowCurrentIndex++;
-                    if(gameON)
-                        playTableGame();*/
                 }
                 else if (gameMode == GAME_MODE_KID) {
                     if(isSoundOn) {
@@ -292,30 +284,28 @@ public class TableGame extends AppCompatActivity {
             else if ((tableMultiplier == 10) && correctAnswerClicked) {
                 setAndUtterTableRowView();
 
-                myUiThreadHandler.post( new Runnable(){
-                    public void run () {
+                runOnUiThread(() ->{
+
                         ivGameStatus.setImageResource(R.drawable.welldone2);
                         ScaleAnimation scaleAnimation = new ScaleAnimation(0.1f, 1.0f, 0.1f, 1.0f);
                         scaleAnimation.setDuration(500l);
                         ivGameStatus.startAnimation(scaleAnimation);
-                    }
+
                 });
 
-
-
-                gameON = false;
-
-                if(isSoundOn) {
-                    gameStatusSound = MediaPlayer.create(TableGame.this, R.raw.greatwelldone);
-                    gameStatusSound.start();
+                if (gameMode!=GAME_MODE_LEARN) {
+                    if(isSoundOn) {
+                        gameStatusSound = MediaPlayer.create(TableGame.this, R.raw.greatwelldone);
+                        gameStatusSound.start();
                     /*try {
 
                         Thread.sleep(2500);
                     } catch (InterruptedException e) {}*/
-                    gameStatusSound = MediaPlayer.create(TableGame.this, R.raw.claps);
-                    gameStatusSound.start();
+                        gameStatusSound = MediaPlayer.create(TableGame.this, R.raw.claps);
+                        gameStatusSound.start();
+                    }
                 }
-
+                gameON = false;
             }
 
             else if(!wrongAnswerClicked && !correctAnswerClicked){
@@ -395,29 +385,15 @@ public class TableGame extends AppCompatActivity {
     }
 
     public void  setChoiceBoxView(){
-        /*if (gameMode == GAME_MODE_LEARN){
+        runOnUiThread( () -> {
 
-            myUiThreadHandler.post( new Runnable(){
-                public void run () {
-                    for (tvChoiceBoxCurrentIndex = 0; tvChoiceBoxCurrentIndex < 5; tvChoiceBoxCurrentIndex++) {
-                        tvChoiceBox[tvChoiceBoxCurrentIndex].setVisibility(View.GONE);
-                    }
-                    tvChoiceBoxCurrentIndex = 0;
-                }
-            });
+            for (tvChoiceBoxCurrentIndex = 0; tvChoiceBoxCurrentIndex < 5; tvChoiceBoxCurrentIndex++) {
+                tvChoiceBox[tvChoiceBoxCurrentIndex].setText(choiceList.get(tvChoiceBoxCurrentIndex).toString());
 
-        }*/
-        //else {
-            runOnUiThread( () -> {
+            }
 
-                    for (tvChoiceBoxCurrentIndex = 0; tvChoiceBoxCurrentIndex < 5; tvChoiceBoxCurrentIndex++) {
-                        tvChoiceBox[tvChoiceBoxCurrentIndex].setText(choiceList.get(tvChoiceBoxCurrentIndex).toString());
-
-                    }
-
-            });
-
-        //}
+        });
+        return;
     }
 
     String createTableRowText(){
@@ -434,8 +410,6 @@ public class TableGame extends AppCompatActivity {
     }
 
     public static void setChoiceList() {
-
-
         choiceList.clear();
         choiceList.add((tableNumber)*(tableMultiplier+1));
         choiceList.add((tableNumber)*(tableMultiplier-1));
@@ -443,15 +417,16 @@ public class TableGame extends AppCompatActivity {
         choiceList.add((tableNumber+1)*(tableMultiplier));
         choiceList.add(tableNumber*tableMultiplier);
         Collections.shuffle(choiceList);
+        return;
     }
 
      void initializeGamePlayLayout(){
 
 
-        //tvTableRow is array[10] of TableRow Views. Here we are initializing it & setting visibility to GONE
+        //tvTableRow is array[10] of TableRow Views. Here we are initializing it & setting visibility to INVISIBLE
         for (tvTableRowCurrentIndex=0; tvTableRowCurrentIndex<10; tvTableRowCurrentIndex++){
             tvTableRow[tvTableRowCurrentIndex] = (TextView) (tablePlayAreaLayout.getChildAt(tvTableRowCurrentIndex));
-            tvTableRow[tvTableRowCurrentIndex].setVisibility(View.GONE);
+            tvTableRow[tvTableRowCurrentIndex].setVisibility(View.INVISIBLE);
 
         }
         tvTableRowCurrentIndex = 0;
@@ -474,9 +449,6 @@ public class TableGame extends AppCompatActivity {
                         setChoiceList();
                         setChoiceBoxView();
 
-
-                        //
-                        //playTableGame();
                         myWorkingThreadHandler.post(()->{
                             playTableGame();
                         });
@@ -485,10 +457,10 @@ public class TableGame extends AppCompatActivity {
                     else {
                         correctAnswerClicked = false;
                         wrongAnswerClicked = true;
-                        playTableGame();
-                        /*myWorkingThreadHandler.post(()->{
 
-                        });*/
+                        myWorkingThreadHandler.post(()->{
+                            playTableGame();
+                        });
 
                     }
 
@@ -526,6 +498,7 @@ public class TableGame extends AppCompatActivity {
             }
         }
     }
+
     public void setUttereanceListenerFortts(){
         tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
             @Override
@@ -545,6 +518,10 @@ public class TableGame extends AppCompatActivity {
                     if (gameON)
                         playTableGame();
                 }
+
+
+
+
             }
 
             @Override
