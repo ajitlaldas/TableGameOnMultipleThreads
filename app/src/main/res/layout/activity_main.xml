@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainActivityLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:background="@color/lightBrown"
+    android:gravity="center_horizontal"
+    android:isScrollContainer="true"
+    android:orientation="vertical"
+    android:scrollIndicators="top"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbarSize="40dp"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical"
+    android:textAlignment="center"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:id="@+id/mainScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/lightBrown"
+        android:foregroundGravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightBrown"
+            android:foregroundGravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="162dp"
+                android:background="@color/lightBrown"
+                app:srcCompat="@drawable/mathtable" />
+
+            <LinearLayout
+                android:id="@+id/layoutGameMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="50dp"
+                android:background="@color/lightBrown"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvRadioGroupGameMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#80D7CCC8"
+                    android:text="@string/tvRadioGroupGameMode_text"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <RadioGroup
+                    android:id="@+id/radioGroupGameMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/teal_200">
+
+                    <RadioButton
+                        android:id="@+id/radioButtonModeLearn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="9dp"
+                        android:background="@color/teal_200"
+                        android:backgroundTint="@color/white"
+                        android:shadowColor="@color/white"
+                        android:text="@string/radioButtonModeLearn_text"
+                        android:textColor="@color/purple_700"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonModeKid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="9dp"
+                        android:background="@color/teal_200"
+                        android:backgroundTint="@color/white"
+                        android:shadowColor="@color/white"
+                        android:text="@string/radioButtonModeKid_text"
+                        android:textColor="@color/purple_700"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonModeChallenge"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="9dp"
+                        android:background="@color/teal_200"
+                        android:backgroundTint="@color/white"
+                        android:shadowColor="@color/white"
+                        android:text="@string/radioButtonModeChallenge_text"
+                        android:textColor="@color/purple_700"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonModeChallengePlus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="9dp"
+                        android:background="@color/teal_200"
+                        android:backgroundTint="@color/white"
+                        android:shadowColor="@color/white"
+                        android:text="@string/radioButtonModeChallengePlus_text"
+                        android:textColor="@color/purple_700"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/radioButtonModeChallengePlusPlus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="9dp"
+                        android:background="@color/teal_200"
+                        android:backgroundTint="@color/white"
+                        android:shadowColor="@color/white"
+                        android:text="@string/radioButtonModeChallengePlusPlus_text"
+                        android:textColor="@color/purple_700"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/playTableGameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/lightBrown"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvPlayTableGame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="1"
+                    android:background="#6A03DAC5"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/tvPlayTableGame_description"
+                    android:textAlignment="center"
+                    android:textColor="@color/purple_700"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etTableNumber"
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/Orange"
+                    android:backgroundTint="@color/Orange"
+                    android:ems="10"
+                    android:foregroundTint="@color/white"
+                    android:inputType="number"
+                    android:maxWidth="100dp"
+                    android:shadowColor="#F6EE96"
+                    android:textColor="@color/purple_700"
+                    android:textColorHighlight="@color/white"
+                    android:textColorHint="@color/white"
+                    android:textColorLink="@color/white"
+                    android:textSize="24sp" />
+
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/isSoundOn"
+                style="@android:style/Widget.Material.CompoundButton.Switch"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="60dp"
+                android:background="@color/lightBrown"
+                android:switchMinWidth="60dp"
+                android:text="@string/isSoundOn_text"
+                android:textColor="@color/purple_700"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:thumbTint="@color/teal_200"
+                android:trackTint="@color/white"
+                android:trackTintMode="src_over" />
+
+            <Button
+                android:id="@+id/buttonPlayTableGame"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/purple_700"
+                android:text="@string/buttonTableGameFor_text"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

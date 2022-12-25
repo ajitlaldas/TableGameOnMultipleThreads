@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Play Table Game</string>
+    <string name="buttonPlayTableGame_contentDescriptor">Pay Table Game</string>
+    <string name="etTableGameFor_hint">Enter No to Play Game For: </string>
+    <string name="buttonTableGameFor_text">   START   </string>
+    <string name="tvPlayTableGame_description">Enter a no &amp; Press START to play table game</string>
+    <string name="isSoundOn_text">Sound</string>
+    <string name="tvRadioGroupGameMode_text">SELECT GAME MODE: </string>
+    <string name="radioButtonModeLearn_text">LEARN MODE</string>
+    <string name="radioButtonModeKid_text">KID MODE</string>
+    <string name="radioButtonModeChallenge_text">CHALLENGE</string>
+    <string name="radioButtonModeChallengePlus_text">CHALLENGE+</string>
+    <string name="radioButtonModeChallengePlusPlus_text">CHALLENGE++</string>
+</resources>
