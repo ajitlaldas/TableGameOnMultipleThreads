@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -50,7 +51,8 @@ public class TableGame extends AppCompatActivity {
     int [] soundCorrect = new int[10];
     int [] soundWrong = new int[10];
     int [] soundGameFinish = new int[10];
-
+    static int wrongClickCountInRound = 0;
+    static int wrongClickCountInGame = 0;
 
     MediaPlayer gameStatusSound =new MediaPlayer();
 
@@ -76,6 +78,8 @@ public class TableGame extends AppCompatActivity {
     Handler myWorkingThreadHandler;
 
     static List<Integer> choiceList = new ArrayList<>();
+    static  List<Integer> challengePlusModeTableList = new ArrayList<>();
+    static Iterator challengePlusModeTableListIterator;
 
     @Override
     protected void onStart() {
@@ -139,10 +143,6 @@ public class TableGame extends AppCompatActivity {
         setContentView(R.layout.activity_table_game);
 
         Looper myLooper = Looper.getMainLooper();
-
-
-
-
         Log.i("TableGame", "onCreate() " + Thread.currentThread().getName() + " ID: " + Thread.currentThread().getId());
 
         //Looper.prepare();
@@ -163,6 +163,17 @@ public class TableGame extends AppCompatActivity {
 
         initializeGamePlayLayout();
         initializeSoundUri();
+
+        if (gameMode == GAME_MODE_CHALLENGE_PLUS){
+            for (int i = 0; i< 8; i++){
+                challengePlusModeTableList.add(12+i);
+            }
+            Collections.shuffle(challengePlusModeTableList);
+            Collections.rotate(challengePlusModeTableList, 1);
+            challengePlusModeTableList = challengePlusModeTableList.subList(3,7);
+            challengePlusModeTableListIterator =  challengePlusModeTableList.iterator();
+            tableNumber = (int) challengePlusModeTableListIterator.next();
+        }
 
         Runnable myRunnable = new Runnable() {
             @Override
@@ -228,7 +239,7 @@ public class TableGame extends AppCompatActivity {
 
     protected void playTableGame(){
 
-        if(!gameON && !gameRoundFinished) {
+        if(!gameON && !gameFinishedSuccessfully) {
 
             correctAnswerClicked = false;
             wrongAnswerClicked = false;
@@ -238,8 +249,13 @@ public class TableGame extends AppCompatActivity {
             tvTableRowCurrentIndex = 0;
             tvChoiceBoxCurrentIndex = 0;
 
-            if (gameMode == GAME_MODE_LEARN || gameMode == GAME_MODE_KID || gameMode == GAME_MODE_CHALLENGE) {
+            if (gameMode == GAME_MODE_LEARN || gameMode == GAME_MODE_KID || gameMode == GAME_MODE_CHALLENGE || gameMode == GAME_MODE_CHALLENGE_PLUS) {
                 tableMultiplier = 1;
+                if (gameMode == GAME_MODE_CHALLENGE){
+                    tableNumber = new Random().nextInt(8);
+                    tableNumber  = tableNumber + 12;
+                }
+
                 if(gameMode == GAME_MODE_LEARN){
                     correctAnswerClicked = true; //for LEARN mode sets correctAnswerClick to true
                 }
@@ -253,7 +269,7 @@ public class TableGame extends AppCompatActivity {
             }
         }
 
-        if (gameON && !gameRoundFinished) {
+        if (gameON && !gameFinishedSuccessfully) {
 
             if (wrongAnswerClicked && gameMode!=GAME_MODE_LEARN) {
                 if(isSoundOn) {
@@ -267,7 +283,7 @@ public class TableGame extends AppCompatActivity {
                     ivGameStatus.startAnimation(scaleAnimation);
                 });
                 try {
-                    Thread.sleep(400);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -278,7 +294,7 @@ public class TableGame extends AppCompatActivity {
                     setAndUtterTableRowView();
 
                 }
-                else if (gameMode == GAME_MODE_KID) {
+                else {
                     setAndUtterTableRowView();
                     if(isSoundOn) {
 
@@ -314,8 +330,8 @@ public class TableGame extends AppCompatActivity {
                         ivGameStatus.startAnimation(scaleAnimation);
 
                 });
-
-                if (gameMode!=GAME_MODE_LEARN) {
+                gameRoundFinished = true;
+                if (gameMode==GAME_MODE_KID || gameMode == GAME_MODE_CHALLENGE) {
                     if(isSoundOn) {
                         gameStatusSound = MediaPlayer.create(TableGame.this, R.raw.greatwelldone);
                         gameStatusSound.start();
@@ -323,9 +339,28 @@ public class TableGame extends AppCompatActivity {
                         gameStatusSound = MediaPlayer.create(TableGame.this, soundGameFinish[new Random().nextInt(4)]);
                         gameStatusSound.start();
                     }
+                    gameON = false;
                 }
-                gameON = false;
-                gameRoundFinished = true;
+                if (gameMode == GAME_MODE_CHALLENGE_PLUS){
+                    if (challengePlusModeTableListIterator.hasNext()){
+                        tableNumber = (int) challengePlusModeTableListIterator.next();
+                        tableMultiplier = 1;
+                        tvTableRowCurrentIndex = 0;
+                        tvChoiceBoxCurrentIndex = 0;
+                        runOnUiThread(() -> initializeGamePlayLayout());
+                        try {
+                            Thread.sleep(400);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        gameON = false;
+                        playTableGame();
+                    }
+                    else{
+                        gameFinishedSuccessfully = true;
+                    }
+                }
+
             }
 
             else if(!wrongAnswerClicked && !correctAnswerClicked){
@@ -376,12 +411,12 @@ public class TableGame extends AppCompatActivity {
             });
             if(ttsInitializedSuccessfully) {
                 String callbackId = "myTtsSpeakerQuestion";
-                enableNextTableRowPlay = true;
                 tts.speak(tableNumber + "..  " + tableMultiplier + "'s are", TextToSpeech.QUEUE_FLUSH, null, callbackId);
                 ttsIsUtteringTableRow = true;
                 Log.i("myWorkingThread", "tts is speaking " + ttsIsUtteringTableRow);
 
             }
+            enableNextTableRowPlay = true;
             return;
         }
     }
@@ -445,7 +480,7 @@ public class TableGame extends AppCompatActivity {
                         TextView tv1 = (TextView) view1;
                         if ((Integer.parseInt(tv1.getText().toString()) == tableNumber*tableMultiplier) || gameMode == GAME_MODE_LEARN) {
 
-                            //setAndUtterTableRowView();
+                            enableNextTableRowPlay = false;
                             myWorkingThreadHandler.post(()->{
                                 correctAnswerClicked = true;
                                 wrongAnswerClicked = false;
