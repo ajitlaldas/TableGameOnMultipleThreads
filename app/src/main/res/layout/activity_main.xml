@@ -104,7 +104,8 @@
                         android:text="@string/radioButtonModeChallenge_text"
                         android:textColor="@color/purple_700"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <RadioButton
                         android:id="@+id/radioButtonModeChallengePlus"
@@ -117,7 +118,8 @@
                         android:text="@string/radioButtonModeChallengePlus_text"
                         android:textColor="@color/purple_700"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <RadioButton
                         android:id="@+id/radioButtonModeChallengePlusPlus"
@@ -130,7 +132,8 @@
                         android:text="@string/radioButtonModeChallengePlusPlus_text"
                         android:textColor="@color/purple_700"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                 </RadioGroup>
             </LinearLayout>
@@ -200,7 +203,8 @@
                 android:textStyle="bold"
                 android:thumbTint="@color/teal_200"
                 android:trackTint="@color/white"
-                android:trackTintMode="src_over" />
+                android:trackTintMode="src_over"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/buttonPlayTableGame"
