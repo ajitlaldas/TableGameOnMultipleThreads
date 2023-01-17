@@ -262,9 +262,23 @@ public class TableGame extends AppCompatActivity {
                 else {
                     setChoiceList();
                     setChoiceBoxView();
+
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     runOnUiThread( ()->{
                         choiceLayout.setVisibility(View.VISIBLE);
                     });
+
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }
@@ -322,14 +336,7 @@ public class TableGame extends AppCompatActivity {
             else if ((tableMultiplier == 10) && correctAnswerClicked) {
                 setAndUtterTableRowView();
 
-                runOnUiThread(() ->{
 
-                        ivGameStatus.setImageResource(R.drawable.welldone2);
-                        ScaleAnimation scaleAnimation = new ScaleAnimation(0.1f, 1.0f, 0.1f, 1.0f);
-                        scaleAnimation.setDuration(500l);
-                        ivGameStatus.startAnimation(scaleAnimation);
-
-                });
                 gameRoundFinished = true;
                 if (gameMode==GAME_MODE_KID || gameMode == GAME_MODE_CHALLENGE) {
                     if(isSoundOn) {
@@ -340,20 +347,40 @@ public class TableGame extends AppCompatActivity {
                         gameStatusSound.start();
                     }
                     gameON = false;
+                    runOnUiThread(() ->{
+
+                        ivGameStatus.setImageResource(R.drawable.welldone2);
+                        ScaleAnimation scaleAnimation = new ScaleAnimation(0.1f, 1.0f, 0.1f, 1.0f);
+                        scaleAnimation.setDuration(500l);
+                        ivGameStatus.startAnimation(scaleAnimation);
+
+                    });
                 }
                 if (gameMode == GAME_MODE_CHALLENGE_PLUS){
                     if (challengePlusModeTableListIterator.hasNext()){
                         tableNumber = (int) challengePlusModeTableListIterator.next();
                         tableMultiplier = 1;
+                        correctAnswerClicked = false;
+                        wrongAnswerClicked = false;
                         tvTableRowCurrentIndex = 0;
                         tvChoiceBoxCurrentIndex = 0;
-                        runOnUiThread(() -> initializeGamePlayLayout());
-                        try {
+                        enableNextTableRowPlay = false;
+                        runOnUiThread(() -> resetGamePlayLayout());
+                        /*try {
                             Thread.sleep(400);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }
+                        }*/
+                        //gameON = false;
                         gameON = false;
+                        tableMultiplier = 1;
+                        correctAnswerClicked = false;
+                        wrongAnswerClicked = false;
+                        tvTableRowCurrentIndex = 0;
+                        tvChoiceBoxCurrentIndex = 0;
+                        setChoiceList();
+                        setChoiceBoxView();
+                        setAndUtterTableRowView();
                         playTableGame();
                     }
                     else{
@@ -515,6 +542,19 @@ public class TableGame extends AppCompatActivity {
         choiceLayout.setVisibility(View.GONE);
         tvChoiceBoxCurrentIndex = 0;
         tableMultiplier = 1;
+    }
+
+    void resetGamePlayLayout(){
+
+
+        //tvTableRow is array[10] of TableRow Views. Here we are initializing it & setting visibility to INVISIBLE
+        for (int tvTableRowTempIndex=0; tvTableRowTempIndex<10; tvTableRowTempIndex++){
+            tvTableRow[tvTableRowTempIndex].setVisibility(View.INVISIBLE);
+
+        }
+
+        choiceLayout.setVisibility(View.GONE);
+
     }
 
     void setGameStatusLayout(){
