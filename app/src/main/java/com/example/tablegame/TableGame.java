@@ -263,21 +263,21 @@ public class TableGame extends AppCompatActivity {
                     setChoiceList();
                     setChoiceBoxView();
 
-                    try {
+                    /*try {
                         Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                     runOnUiThread( ()->{
                         choiceLayout.setVisibility(View.VISIBLE);
                     });
 
-                    try {
+                    /*try {
                         Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                 }
             }
@@ -511,15 +511,25 @@ public class TableGame extends AppCompatActivity {
                             myWorkingThreadHandler.post(()->{
                                 correctAnswerClicked = true;
                                 wrongAnswerClicked = false;
-                                playTableGame();
-                                if (tableMultiplier<10) {
-                                    tableMultiplier++;
-                                    tvTableRowCurrentIndex++;
-                                    correctAnswerClicked = false;
-                                    setChoiceList();
-                                    setChoiceBoxView();
+                                //this if-else was added because otherwise, in Challenge+ mode, on correct click at tableMultiplier==10,
+                                // playTableGame() was getting called twice, causing the 1st row of next table to be skipped.
+                                if (gameMode == GAME_MODE_CHALLENGE_PLUS && tableMultiplier == 10){
                                     playTableGame();
+                                    return;
                                 }
+
+                                else {
+                                    playTableGame();
+                                    if (tableMultiplier<10) {
+                                        tableMultiplier++;
+                                        tvTableRowCurrentIndex++;
+                                        correctAnswerClicked = false;
+                                        setChoiceList();
+                                        setChoiceBoxView();
+                                        playTableGame();
+                                    }
+                                }
+
                             });
 
                         }
